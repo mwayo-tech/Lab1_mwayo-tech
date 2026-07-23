@@ -75,18 +75,11 @@ def evaluate_grades(data):
     final_grade = formative_total + summative_total
     gpa = (final_grade / 100) * 5.0
 
-    print(f"Formative Total: {formative_total:.2f} / 60")
-    print(f"Summative Total: {summative_total:.2f} / 40")
-    print(f"Final Grade: {final_grade:.2f}%")
-    print(f"GPA: {gpa:.3f}")
-
     # d) Determine Pass/Fail status (>= 50% in BOTH categories)
     formative_pass = formative_total >= 30   # 50% of 60
     summative_pass = summative_total >= 20   # 50% of 40
     passed = formative_pass and summative_pass
-
     status = "PASSED" if passed else "FAILED"
-    print(f"Status: {status}")
 
     # e) Check for failed formative assignments (< 50%) and determine
     #    which one(s) have the highest weight for resubmission.
@@ -95,15 +88,36 @@ def evaluate_grades(data):
         if item['group'].lower() == 'formative' and item['score'] < 50
     ]
 
-    # f) Print the final decision and resubmission options
     if failed_formatives:
         max_weight = max(item['weight'] for item in failed_formatives)
         resubmission_candidates = [
             item['assignment'] for item in failed_formatives if item['weight'] == max_weight
         ]
-        print(f"Available for resubmission: {', '.join(resubmission_candidates)}")
+        resubmission_text = ", ".join(resubmission_candidates)
     else:
-        print("No formative assignments are available for resubmission.")
+        resubmission_text = "None"
+
+    # f) Print the final decision as a formatted transcript table
+    col_assignment, col_category, col_grade, col_weight, col_final = 38, 10, 10, 8, 12
+
+    print()
+    print(f"{'Assignment':<{col_assignment}}{'Category':<{col_category}}"
+          f"{'Grade (%)':<{col_grade}}{'Weight':<{col_weight}}{'Final weight':<{col_final}}")
+    print("-" * (col_assignment + col_category + col_grade + col_weight + col_final))
+
+    for item in data:
+        category_code = "FA" if item['group'].lower() == 'formative' else "SA"
+        final_weight = item['score'] * item['weight'] / 100
+        print(f"{item['assignment']:<{col_assignment}}{category_code:<{col_category}}"
+              f"{item['score']:<{col_grade}.0f}{item['weight']:<{col_weight}.0f}{final_weight:<{col_final}.2f}")
+
+    print("-" * (col_assignment + col_category + col_grade + col_weight + col_final))
+    print(f"{'Formatives (60)':<{col_assignment + col_category + col_grade + col_weight}}{formative_total:.2f}")
+    print(f"{'Summatives (40)':<{col_assignment + col_category + col_grade + col_weight}}{summative_total:.2f}")
+    print(f"{'GPA':<{col_assignment + col_category + col_grade + col_weight}}{gpa:.3f}")
+    print(f"{'Status':<{col_assignment + col_category + col_grade + col_weight}}{status}")
+    print(f"{'Available for resubmission':<{col_assignment + col_category + col_grade + col_weight}}{resubmission_text}")
+    print()
 
 
 if __name__ == "__main__":
