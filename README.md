@@ -33,15 +33,21 @@ assignment,group,score,weight
 - Formative weights must sum to exactly 60, Summative weights must sum to exactly 40 (Total = 100)
 
 ### Example output
-```
 --- Processing Grades ---
-Formative Total: 44.40 / 60
-Summative Total: 32.50 / 40
-Final Grade: 76.90%
-GPA: 3.845
-Status: PASSED
-Available for resubmission: Discussion Forum
-```
+
+Assignment                            Category  Grade (%) Weight  Final weight
+------------------------------------------------------------------------------
+Group Coding Lab                      FA        100       30      30.00
+Discussion Forum                      FA        45        15      6.75
+General Quiz                          FA        51        15      7.65
+Pre-Summative                         SA        55        10      5.50
+Individual Lab                        SA        90        30      27.00
+------------------------------------------------------------------------------
+Formatives (60)                                                   44.40
+Summatives (40)                                                   32.50
+GPA                                                                3.845
+Status                                                             PASSED
+Available for resubmission                                        Discussion Forum
 
 ### Pass/Fail rule
 A student passes only if they score **at least 50%** in **both** the Formative (≥30/60) and Summative (≥20/40) categories.
